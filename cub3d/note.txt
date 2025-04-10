@@ -1,0 +1,5 @@
+recuperer les 6 premieres lignes (sans espaces)
+
+si il y a un probleme, s'aretter la
+
+ensuite on stock la map
