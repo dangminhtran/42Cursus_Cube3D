@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dangtran <dangtran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 17:05:15 by yamartin          #+#    #+#             */
-/*   Updated: 2025/03/18 13:58:49 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/15 13:51:27 by dangtran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,3 +27,6 @@ int	general_parsing(t_map_data *map_data)
 		return (-1);
 	return (0);
 }
+
+// TODO - Verifier si c'est un .cub
+// TODO - Stocker la data du player (pos)
