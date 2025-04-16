@@ -6,7 +6,7 @@
 /*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:38:10 by yamartin          #+#    #+#             */
-/*   Updated: 2025/03/14 15:43:27 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:51:01 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,16 @@ void	free_mlx(t_display *display)
 	mlx_destroy_window(display->mlx_ptr, display->mlx_wind);
 	mlx_destroy_display(display->mlx_ptr);
 	free(display->mlx_ptr);
+}
+
+void verLine(t_display *info, int x, int y1, int y2, int color)
+{
+    int y;
+    
+    y = y1;
+    while (y <= y2)
+    {
+        mlx_pixel_put(info->mlx_ptr, info->mlx_wind, x, y, color);
+        y++;
+    }
 }

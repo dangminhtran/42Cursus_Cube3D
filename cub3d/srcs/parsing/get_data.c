@@ -6,7 +6,7 @@
 /*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:49:30 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/09 18:02:56 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:36:56 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,27 @@ int	line_counter(char **tableau)
 	return (i);
 }
 
-// void	get_player_pos(t_map_data *map_data, t_display *display)
-// {
-// 	int	i;
-// 	int	j;
-	
-// 	i = 0;
-// 	j = 0;
-// 	while (i < ma)
-// }
+void	get_player_pos(t_map_data *map_data, t_display *display)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (map_data->map[i])
+	{
+		printf("%s", map_data->map[i]);
+		j = 0;
+		while (map_data->map[i][j])
+		{
+			if (map_data->map[i][j] == 'N' || map_data->map[i][j] == 'S'
+				|| map_data->map[i][j] == 'E' || map_data->map[i][j] == 'W')
+			{
+				display->player_posx = i;
+				display->player_posy = j;
+			}
+			j++;
+		}
+		i++;
+	}
+}

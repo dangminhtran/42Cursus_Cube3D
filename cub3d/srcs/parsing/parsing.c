@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dangtran <dangtran@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 17:05:15 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/15 13:51:27 by dangtran         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:13:39 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	general_parsing(t_map_data *map_data)
 		return (-1);
 	if (parse_map(map_data) == -1)
 		return (-1);
+	
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:16:01 by yamartin          #+#    #+#             */
-/*   Updated: 2025/03/21 13:41:42 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:16:12 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int	main(int ac, char **av)
 		ft_free_data(&map_data);
 		return (0);
 	}
+	get_player_pos(&map_data, &display);
+	printf("x : %d\n", display.player_posx);
+	printf("y : %d\n", display.player_posy);
 	open_window(&display);
 	ft_free_data(&map_data);
 	return (0);

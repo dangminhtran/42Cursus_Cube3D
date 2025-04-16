@@ -6,7 +6,7 @@
 /*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:51:55 by yamartin          #+#    #+#             */
-/*   Updated: 2025/03/25 15:16:32 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:19:25 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	get_special_map(t_map_data *map_data)
 			j++;
 		}
 		map_data->special_map[i][j] = '\0';
-		printf("%s\n", map_data->special_map[i]);
+		// printf("%s\n", map_data->special_map[i]);
 		i++;
 	}
 	map_data->special_map[i] = NULL;

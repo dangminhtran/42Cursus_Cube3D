@@ -6,7 +6,7 @@
 /*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:05:34 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/09 15:04:12 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:09:58 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include "get_next_line/get_next_line.h"
 # include "mlx.h"
 # include <fcntl.h>
+# include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/stat.h>
-# include <math.h>
 
 typedef struct s_display
 {
@@ -84,5 +84,6 @@ int				get_floor_rgb(t_textures *textures);
 int				only_numbers_or_space(char *line);
 int				is_valid_rgb(char *line);
 int				line_counter(char **tableau);
+void			get_player_pos(t_map_data *map_data, t_display *display);
 
 #endif
