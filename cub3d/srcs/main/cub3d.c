@@ -6,7 +6,7 @@
 /*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:16:01 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/15 14:16:12 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:46:33 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int ac, char **av)
 	return (0);
 	map_data.map_file = ft_stock_file(av[1], map_data.map_file);
 	init_data(&map_data);
-	if (general_parsing(&map_data) == -1)
+	if (general_parsing(&map_data, av) == -1)
 	{
 		ft_free_data(&map_data);
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:05:34 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/15 14:09:58 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:46:26 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void			get_map_width(t_map_data *map_data, int count, char **map);
 int				get_only_map(t_map_data *map_data, int start_index);
 int				get_textures(t_map_data *map_data);
 int				parse_textures_lines(t_textures *textures);
-int				general_parsing(t_map_data *map_data);
+int				general_parsing(t_map_data *map_data, char **av);
 void			ft_free(char **map, int count);
 void			ft_free_data(t_map_data *map_data);
 int				check_map_char(char **map);
@@ -85,5 +85,6 @@ int				only_numbers_or_space(char *line);
 int				is_valid_rgb(char *line);
 int				line_counter(char **tableau);
 void			get_player_pos(t_map_data *map_data, t_display *display);
+int				is_valid_extension(char *str);
 
 #endif
