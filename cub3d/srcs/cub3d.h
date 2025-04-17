@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dangtran <dangtran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:05:34 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/16 16:46:26 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:51:49 by dangtran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ typedef struct s_map_data
 	t_textures	*textures;
 }				t_map_data;
 
-
 // Définition des directions
 typedef struct s_vector
 {
 	int		x;
-	int		y;
+	int		y; 
+	// TODO - rajouter z ?
 }	t_vector;
 
 // Définition des coordonnées
@@ -116,7 +116,7 @@ typedef struct s_frame
 typedef struct s_player
 {
 	t_coord		pos;
-	t_coord		dir;
+	t_coord		dir; // TODO- a mettre en vecteur ?
 	t_coord		plane;
 	int			move;
 	double		speed;

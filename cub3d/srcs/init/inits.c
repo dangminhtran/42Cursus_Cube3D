@@ -44,5 +44,18 @@ int	ft_init_frame(t_frame *frame)
 	return (1);
 }
 
+ft_init_settings(t_settings *settings)
+{
+	settings->fov = 0;
+	settings->move_speed = 0;
+	settings->sprint_speed = 0;
+	settings->rot_speed = 0;
+	settings->cos_rot_speed = 0;
+	settings->sin_rot_speed = 0;
+	settings->cos_neg_rot_speed = 0;
+	settings->sin_neg_rot_speed = 0;
+	return (1);
+}
+
 
 
