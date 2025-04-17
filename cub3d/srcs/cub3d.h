@@ -22,7 +22,18 @@
 # include <stdlib.h>
 # include <sys/stat.h>
 
-typedef struct s_display
+
+# define M_UP				0x00001
+# define M_DOWN				0x00002
+# define M_LEFT				0x00004
+# define M_RIGHT			0x00008
+
+# define M_VIEW_UP			0x00010
+# define M_VIEW_DOWN		0x00020
+# define M_VIEW_LEFT		0x00040
+# define M_VIEW_RIGHT		0x00080
+
+typedef struct s_display // == t_window ?
 {
 	void		*mlx_ptr;
 	void		*mlx_wind;
@@ -52,8 +63,89 @@ typedef struct s_map_data
 	int			map_height;
 	int			file_size;
 	int			count;
+	t_vector	spawn;
 	t_textures	*textures;
 }				t_map_data;
+
+
+// Définition des directions
+typedef struct s_vector
+{
+	int		x;
+	int		y;
+}	t_vector;
+
+// Définition des coordonnées
+typedef struct s_coord
+{
+	double		x;
+	double		y;
+}	t_coord;
+
+// Définition de la fenêtre
+typedef struct s_window
+{
+	void		*mlx_ptr;
+	void		*win_ptr;
+	int			height;
+	int			width;
+	t_frame		frame;
+}	t_window;
+
+
+typedef struct s_frame
+{
+	t_coord		ray_dir;
+	t_vector	map;
+	t_coord		side_dist;
+	t_coord		delta_dist;
+	t_coord		camera;
+	t_vector	step;
+	t_coord		wall;
+	t_vector	mouse;
+	int			hit;
+	char		hit_value;
+	int			side;
+	double		perp_wall_dist;
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
+	int			color;
+}	t_frame;
+
+typedef struct s_player
+{
+	t_coord		pos;
+	t_coord		dir;
+	t_coord		plane;
+	int			move;
+	double		speed;
+	double		rot_speed;
+}	t_player;
+
+typedef struct s_settings
+{
+	double		fov;
+	double		move_speed;
+	double		sprint_speed;
+	double		rot_speed;
+	double		cos_rot_speed;
+	double		sin_rot_speed;
+	double		cos_neg_rot_speed;
+	double		sin_neg_rot_speed;
+}	t_settings;
+
+typedef struct s_game
+{
+	t_window			window;
+	t_map_data			map;
+	t_textures		textures;
+	//		parsing;
+	t_frame			frame;
+	t_player		player;
+	t_settings		settings;
+}	t_game;
+
 
 void			open_window(t_display *display);
 int				quit(t_display *display);

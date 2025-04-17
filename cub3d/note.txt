@@ -3,3 +3,29 @@ recuperer les 6 premieres lignes (sans espaces)
 si il y a un probleme, s'aretter la
 
 ensuite on stock la map
+
+TODO 
+1. Faire les hooks
+- pour les touches du clavier
+- pour la souris 
+
+2. Les inits
+- Init les coordonnées -  DONE
+- Init les vecteurs - DONE
+- Init la window - DONE
+- Init la frame - DONE
+- Init la map
+- Init l'image
+- Init les textures
+- Init le player - WIP
+
+3. Le render
+This is shit...
+- Implenter l'algo de raycasting - WIP
+- Dessiner le sol
+- Dessiner le plafond
+- Dessiner les murs
+
+4. Dessiner avec la mlx ?
+
+5. Faire toutes les fonctions exit pour free
