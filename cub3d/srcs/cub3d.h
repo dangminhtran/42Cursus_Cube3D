@@ -33,7 +33,30 @@
 # define M_VIEW_LEFT		0x00040
 # define M_VIEW_RIGHT		0x00080
 
-typedef struct s_display // == t_window ?
+typedef struct s_display // TODO - PROBLEME ENTRE T_DISPLAY ET T_WINDOW
+{
+	void		*mlx_ptr;
+	void		*mlx_wind;
+	t_image		image; // Ajout - Test Minh
+	int			player_posx;
+	int			player_posy;
+}				t_display;
+
+typedef struct s_textures
+{
+	char		*no_texture;
+	char		*so_texture;
+	char		*we_texture;
+	char		*ea_texture;
+	char		*floor_color;
+	char		*ceiling_color;
+	int			ceiling_rgb[3];
+	int			floor_rgb[3];
+	char		**textures;
+}				t_textures;
+
+typedef struct s_map_data
+{typedef struct s_display // == t_window ?
 {
 	void		*mlx_ptr;
 	void		*mlx_wind;
@@ -67,12 +90,12 @@ typedef struct s_map_data
 	t_textures	*textures;
 }				t_map_data;
 
+
 // Définition des directions
 typedef struct s_vector
 {
 	int		x;
-	int		y; 
-	// TODO - rajouter z ?
+	int		y;
 }	t_vector;
 
 // Définition des coordonnées
@@ -92,32 +115,41 @@ typedef struct s_window
 	t_frame		frame;
 }	t_window;
 
+typedef struct s_image
+{
+	void		*img;
+	char		*addr;
+	t_vector	size;
+	int			bits_per_pixel;
+	int			size_line;
+	int			endian;
+}	t_image;
 
 typedef struct s_frame
 {
-	t_coord		ray_dir;
-	t_vector	map;
-	t_coord		side_dist;
-	t_coord		delta_dist;
+	t_coord		ray_dir; // direction du rayon
+	t_vector	map; // position sur la grille de la carte
+	t_coord		side_dist; // distance jusqu'au prochain bord
+	t_coord		delta_dist; // distance a parcourir d'un bord a l'autre
 	t_coord		camera;
 	t_vector	step;
-	t_coord		wall;
+	t_coord		wall; // coords de l'impact avec un mur
 	t_vector	mouse;
-	int			hit;
-	char		hit_value;
-	int			side;
-	double		perp_wall_dist;
-	int			line_height;
-	int			draw_start;
-	int			draw_end;
-	int			color;
+	int			hit; // 0 si pas de mur, 1 si mur
+	char		hit_value; // valeur du mur touché
+	int			side; // quel coté du mur a été touché
+	double		perp_wall_dist; // distance perpendiculaire
+	int			line_height; // hauteur de la ligne a dessiner
+	int			draw_start; // debut de la ligne a dessiner
+	int			draw_end; // fin de la ligne a dessiner
+	int			color; // couleur du mur
 }	t_frame;
 
 typedef struct s_player
 {
 	t_coord		pos;
-	t_coord		dir; // TODO- a mettre en vecteur ?
-	t_coord		plane;
+	t_coord		dir; // direction dans laquelle le joueur regarde
+	t_coord		plane; // le plan caméra pour calculer le champ de vision - raycasting
 	int			move;
 	double		speed;
 	double		rot_speed;
@@ -127,7 +159,103 @@ typedef struct s_settings
 {
 	double		fov;
 	double		move_speed;
-	double		sprint_speed;
+	double		rot_speed;
+	double		cos_rot_speed;
+	double		sin_rot_speed;
+	double		cos_neg_rot_speed;
+	double		sin_neg_rot_speed;
+}	t_settings;
+
+typedef struct s_game
+{
+	t_window			window;
+	t_map_data			map;
+	t_textures		textures;
+	//		parsing;
+	t_frame			frame;
+	t_player		player;
+	t_settings		settings;
+}	t_game;
+	char		**map_file;
+	char		**map;
+	char		**special_map;
+	int			map_width;
+	int			map_height;
+	int			file_size;
+	int			count;
+	t_vector	spawn;
+	t_textures	*textures;
+}				t_map_data;
+
+
+// Définition des directions
+typedef struct s_vector
+{
+	int		x;
+	int		y;
+}	t_vector;
+
+// Définition des coordonnées
+typedef struct s_coord
+{
+	double		x;
+	double		y;
+}	t_coord;
+
+// Définition de la fenêtre
+typedef struct s_window
+{
+	void		*mlx_ptr;
+	void		*win_ptr;
+	int			height;
+	int			width;
+	t_frame		frame;
+}	t_window;
+
+typedef struct s_image
+{
+	void		*img;
+	char		*addr;
+	t_vector	size;
+	int			bits_per_pixel;
+	int			size_line;
+	int			endian;
+}	t_image;
+
+typedef struct s_frame
+{
+	t_coord		ray_dir; // direction du rayon
+	t_vector	map; // position sur la grille de la carte
+	t_coord		side_dist; // distance jusqu'au prochain bord
+	t_coord		delta_dist; // distance a parcourir d'un bord a l'autre
+	t_coord		camera;
+	t_vector	step;
+	t_coord		wall; // coords de l'impact avec un mur
+	t_vector	mouse;
+	int			hit; // 0 si pas de mur, 1 si mur
+	char		hit_value; // valeur du mur touché
+	int			side; // quel coté du mur a été touché
+	double		perp_wall_dist; // distance perpendiculaire
+	int			line_height; // hauteur de la ligne a dessiner
+	int			draw_start; // debut de la ligne a dessiner
+	int			draw_end; // fin de la ligne a dessiner
+	int			color; // couleur du mur
+}	t_frame;
+
+typedef struct s_player
+{
+	t_coord		pos;
+	t_coord		dir; // direction dans laquelle le joueur regarde
+	t_coord		plane; // le plan caméra pour calculer le champ de vision - raycasting
+	int			move;
+	double		speed;
+	double		rot_speed;
+}	t_player;
+
+typedef struct s_settings
+{
+	double		fov;
+	double		move_speed;
 	double		rot_speed;
 	double		cos_rot_speed;
 	double		sin_rot_speed;

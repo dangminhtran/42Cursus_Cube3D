@@ -1,6 +1,10 @@
 
 #include "cub3d.h"
 
+/**
+ * @brief Initialise une structure de coordonnées t_coord. 
+ * Pour la position du joueur & les directions de rayons.
+ */
 int	ft_init_coord(t_coord *coord, double x, double y)
 {
 	coord->x = x;
@@ -8,6 +12,10 @@ int	ft_init_coord(t_coord *coord, double x, double y)
 	return (1);
 }
 
+/**
+ * @brief Initialise une structure de coordonnées t_vector. 
+ * Pour la direction du joueur & le pas de rayons (sur la grille).
+ */
 int	ft_init_vector(t_vector *vec, int x, int y)
 {
 	vec->x = x;
@@ -15,6 +23,20 @@ int	ft_init_vector(t_vector *vec, int x, int y)
 	return (1);
 }
 
+int	ft_init_image(t_game *game, t_image *img)
+{
+	(void)game;
+	img->img = NULL;
+	img->addr = NULL;
+	img->size.x = 0;
+	img->size.y = 0;
+	img->bits_per_pixel = 0;
+	img->size_line = 0;
+	img->endian = 0;
+	return (1);
+}
+
+// Initialise la fenêtre du jeu
 int	ft_init_window(t_game *game)
 {
 	game->window.mlx_ptr = NULL;
@@ -25,6 +47,10 @@ int	ft_init_window(t_game *game)
 	return (1);
 }
 
+/**
+ * @brief Initialise les champs pour le raycasting.
+ * Infos sur le rayon projeté à l'écran
+ */
 int	ft_init_frame(t_frame *frame)
 {
 	ft_init_coord(&frame->ray_dir, 0, 0);
@@ -44,18 +70,7 @@ int	ft_init_frame(t_frame *frame)
 	return (1);
 }
 
-ft_init_settings(t_settings *settings)
-{
-	settings->fov = 0;
-	settings->move_speed = 0;
-	settings->sprint_speed = 0;
-	settings->rot_speed = 0;
-	settings->cos_rot_speed = 0;
-	settings->sin_rot_speed = 0;
-	settings->cos_neg_rot_speed = 0;
-	settings->sin_neg_rot_speed = 0;
-	return (1);
-}
+// TODO - A essayer init des structures avec (struct *){ 0 } pour gagner des lignes
 
 
 

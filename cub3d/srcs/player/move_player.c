@@ -1,8 +1,23 @@
 #include "cub3d.h"
 
-// Test d'une fonction is_blocking
+/**
+ * @brief Gestion des collisions.
+ * Vérifie si le joueur est bloqué par un mur.
+ * 
+ * @details
+ * - Si la nouvelle position est hors limites, on revient à la position précédente.
+ * - Si la nouvelle position est un mur, on vérifie si le joueur est bloqué.
+ *  Si oui, on revient à la position précédente.
+ * - Empêche de sortir de la carte
+ * - Gère les glissades sur les murs
+ * - Si deux axes bloquées, alors annulation du mouvement
+ * 
+ * @param game Le jeu en cours.
+ * @param pos La nouvelle position du joueur.
+ */
 void	is_blocking(t_game *game, t_coord *pos)
 {
+	// Si position hors limites : on revient à la position précédente
 	if (pos->x < 0 || pos->x >= game->map.map_width|| pos->y < 0 \
 		|| pos->y >= game->map.map_height)
 	{
@@ -11,10 +26,12 @@ void	is_blocking(t_game *game, t_coord *pos)
 	}
 	else if (game->map.map[(int)pos->y][(int)pos->x] == '1')
 	{
+		// Collision avec un mur
 		if (game->map.map[(int)pos->y][(int)game->player.pos.x] == '1')
 			pos->y = game->player.pos.y;
 		if (game->map.map[(int)game->player.pos.y][(int)pos->x] == '1')
 			pos->x = game->player.pos.x;
+		// Si toujours bloqué, rollback complet
 		if (game->map.map[(int)pos->y][(int)pos->x] == '1')
 		{
 			pos->x = game->player.pos.x;
@@ -23,6 +40,17 @@ void	is_blocking(t_game *game, t_coord *pos)
 	}
 }
 
+/**
+ * @brief Déplace le joueur dans la direction où il regarde.
+ * 
+ * @details
+ * - Utilise le vecteur dir et la vitesse
+ * - Vérifie si le joueur est bloqué par un mur
+ * 
+ * @param game Le jeu en cours.
+ * @param player Le joueur à déplacer.
+ * @param speed La vitesse de déplacement.
+ */
 static int	ft_move_player_up(t_game *game, t_player *player, double speed)
 {
 	t_coord	new_pos;
@@ -35,6 +63,17 @@ static int	ft_move_player_up(t_game *game, t_player *player, double speed)
 	return (1);
 }
 
+/**
+ * @brief Déplace le joueur en arrière.
+ * 
+ * @details
+ * - Utilise le vecteur dir et la vitesse
+ * - Vérifie si le joueur est bloqué par un mur
+ * 
+ * @param game Le jeu en cours.
+ * @param player Le joueur à déplacer.
+ * @param speed La vitesse de déplacement.
+ */
 static int	ft_move_player_down(t_game *game, t_player *player, double speed)
 {
 	t_coord	new_pos;
@@ -47,6 +86,17 @@ static int	ft_move_player_down(t_game *game, t_player *player, double speed)
 	return (1);
 }
 
+/**
+ * @brief Déplace latéralement le joueur à gauche.
+ * 
+ * @details
+ * - Utilise le vecteur dir et la vitesse
+ * - Vérifie si le joueur est bloqué par un mur
+ * 
+ * @param game Le jeu en cours.
+ * @param player Le joueur à déplacer.
+ * @param speed La vitesse de déplacement.
+ */
 static int	ft_move_player_left(t_game *game, t_player *player, double speed)
 {
 	t_coord	new_pos;
@@ -59,6 +109,17 @@ static int	ft_move_player_left(t_game *game, t_player *player, double speed)
 	return (1);
 }
 
+/**
+ * @brief Déplace latéralement le joueur à droite.
+ * 
+ * @details
+ * - Utilise le vecteur dir et la vitesse
+ * - Vérifie si le joueur est bloqué par un mur
+ * 
+ * @param game Le jeu en cours.
+ * @param player Le joueur à déplacer.
+ * @param speed La vitesse de déplacement.
+ */
 static int	ft_move_player_right(t_game *game, t_player *player, double speed)
 {
 	t_coord	new_pos;
@@ -71,11 +132,19 @@ static int	ft_move_player_right(t_game *game, t_player *player, double speed)
 	return (1);
 }
 
+/**
+ * @brief Fonction principale de déplacement du joueur.
+ * 
+ * @details
+ * - Récupère la vitesse actuelle (ft_speed)
+ * - Appelle les fonctions de déplacement en fonction des touches pressées
+ * - Prend en compte la rotation de la caméra
+ */
 int	ft_move_player(t_game *game, t_player *player)
 {
 	double	speed;
 
-	ft_move_speed(game, player, &speed);
+	ft_speed(game, player, &speed);
 	if (player->move & M_UP)
 		ft_move_player_up(game, player, speed);
 	if (player->move & M_DOWN)
