@@ -1,165 +1,114 @@
-#include "cub3d.h"
+#include "../cub3d.h"
 
-/**
- * @brief Gestion des collisions.
- * Vérifie si le joueur est bloqué par un mur.
- * 
- * @details
- * - Si la nouvelle position est hors limites, on revient à la position précédente.
- * - Si la nouvelle position est un mur, on vérifie si le joueur est bloqué.
- *  Si oui, on revient à la position précédente.
- * - Empêche de sortir de la carte
- * - Gère les glissades sur les murs
- * - Si deux axes bloquées, alors annulation du mouvement
- * 
- * @param game Le jeu en cours.
- * @param pos La nouvelle position du joueur.
- */
-void	is_blocking(t_game *game, t_coord *pos)
+int	handle_keypress(int keycode, t_game *game)
 {
-	// Si position hors limites : on revient à la position précédente
-	if (pos->x < 0 || pos->x >= game->map.map_width|| pos->y < 0 \
-		|| pos->y >= game->map.map_height)
+	if (keycode == 65307) // ESC
 	{
-		pos->x = game->player.pos.x;
-		pos->y = game->player.pos.y;
+		mlx_loop_end(game->window.mlx_ptr);
+		return (0);
 	}
-	else if (game->map.map[(int)pos->y][(int)pos->x] == '1')
+	if (keycode == 119)
+		move_forward(game);
+	if (keycode == 115)
+		move_backward(game);
+	if (keycode == 97 || keycode == 65361)
+		rotate_left(game);
+	if (keycode == 100 || keycode == 65363)
+		rotate_right(game);
+	return (0);
+}
+
+// TODO - Ne marche pas
+void	move_forward(t_game *game)
+{
+	double new_x = game->player.pos.x + game->player.dir.x * game->settings.move_speed;
+	double new_y = game->player.pos.y + game->player.dir.y * game->settings.move_speed;
+	
+	//  Check si c'est un mur
+	if (is_valid_position(game, new_x, game->player.pos.y))
+		game->player.pos.x = new_x;
+	if (is_valid_position(game, game->player.pos.x, new_y))
+		game->player.pos.y = new_y;
+}
+
+void	move_backward(t_game *game)
+{
+	double new_x = game->player.pos.x - game->player.dir.x * game->settings.move_speed;
+	double new_y = game->player.pos.y - game->player.dir.y * game->settings.move_speed;
+	
+	// Check si c'est un mur
+	if (is_valid_position(game, new_x, game->player.pos.y))
+		game->player.pos.x = new_x;
+	if (is_valid_position(game, game->player.pos.x, new_y))
+		game->player.pos.y = new_y;
+}
+
+void	rotate_left(t_game *game)
+{
+	// Rotation de la direction selon la matrice de rotation:
+	// [ cos(a) -sin(a) ]
+	// [ sin(a)  cos(a) ]
+	double old_dir_x = game->player.dir.x;
+	game->player.dir.x = game->player.dir.x * game->settings.cos_rot_speed - 
+						game->player.dir.y * game->settings.sin_rot_speed;
+	game->player.dir.y = old_dir_x * game->settings.sin_rot_speed + 
+						game->player.dir.y * game->settings.cos_rot_speed;
+	
+	// Rotation de la caméra
+	double old_plane_x = game->player.plane.x;
+	game->player.plane.x = game->player.plane.x * game->settings.cos_rot_speed - 
+						game->player.plane.y * game->settings.sin_rot_speed;
+	game->player.plane.y = old_plane_x * game->settings.sin_rot_speed + 
+						game->player.plane.y * game->settings.cos_rot_speed;
+}
+
+void	rotate_right(t_game *game)
+{
+	// Rotation de la direction selon la matrice de rotation avec des angles négatifs
+	// [ cos(-a) -sin(-a) ]
+	// [ sin(-a)  cos(-a) ]
+	double old_dir_x = game->player.dir.x;
+	game->player.dir.x = game->player.dir.x * game->settings.cos_neg_rot_speed - 
+						game->player.dir.y * game->settings.sin_neg_rot_speed;
+	game->player.dir.y = old_dir_x * game->settings.sin_neg_rot_speed + 
+						game->player.dir.y * game->settings.cos_neg_rot_speed;
+	
+	// Rootation de la caméra
+	double old_plane_x = game->player.plane.x;
+	game->player.plane.x = game->player.plane.x * game->settings.cos_neg_rot_speed - 
+						game->player.plane.y * game->settings.sin_neg_rot_speed;
+	game->player.plane.y = old_plane_x * game->settings.sin_neg_rot_speed + 
+						game->player.plane.y * game->settings.cos_neg_rot_speed;
+}
+
+int	is_valid_position(t_game *game, double x, double y)
+{
+	int map_x = (int)x;
+	int map_y = (int)y;
+	
+	// Si la position est en dehors de la carte
+	if (map_x < 0 || map_y < 0 || map_x >= game->map.map_height || map_y >= game->map.map_width)
+		return (0);
+	
+	// Si la position est sur un mur
+	if (game->map.map[map_x][map_y] == '1')
+		return (0);
+	
+	// POur éviter de se coller aux murs
+	double buffer = 0.2;
+	
+	// Verifier si la position est proche d'un mur
+	if (fabs(x - map_x) < buffer || fabs(x - (map_x + 1)) < buffer ||
+		fabs(y - map_y) < buffer || fabs(y - (map_y + 1)) < buffer)
 	{
-		// Collision avec un mur
-		if (game->map.map[(int)pos->y][(int)game->player.pos.x] == '1')
-			pos->y = game->player.pos.y;
-		if (game->map.map[(int)game->player.pos.y][(int)pos->x] == '1')
-			pos->x = game->player.pos.x;
-		// Si toujours bloqué, rollback complet
-		if (game->map.map[(int)pos->y][(int)pos->x] == '1')
+		// Est-ce que la position est proche d'un mur ?
+		if ((map_x + 1 < game->map.map_height && game->map.map[map_x + 1][map_y] == '1' && fabs(x - (map_x + 1)) < buffer) ||
+			(map_x - 1 >= 0 && game->map.map[map_x - 1][map_y] == '1' && fabs(x - map_x) < buffer) ||
+			(map_y + 1 < game->map.map_width && game->map.map[map_x][map_y + 1] == '1' && fabs(y - (map_y + 1)) < buffer) ||
+			(map_y - 1 >= 0 && game->map.map[map_x][map_y - 1] == '1' && fabs(y - map_y) < buffer))
 		{
-			pos->x = game->player.pos.x;
-			pos->y = game->player.pos.y;
+			return (0);
 		}
 	}
-}
-
-/**
- * @brief Déplace le joueur dans la direction où il regarde.
- * 
- * @details
- * - Utilise le vecteur dir et la vitesse
- * - Vérifie si le joueur est bloqué par un mur
- * 
- * @param game Le jeu en cours.
- * @param player Le joueur à déplacer.
- * @param speed La vitesse de déplacement.
- */
-static int	ft_move_player_up(t_game *game, t_player *player, double speed)
-{
-	t_coord	new_pos;
-
-	new_pos.x = player->pos.x + player->dir.x * speed;
-	new_pos.y = player->pos.y + player->dir.y * speed;
-	is_blocking(game, &new_pos);
-	player->pos.x = new_pos.x;
-	player->pos.y = new_pos.y;
-	return (1);
-}
-
-/**
- * @brief Déplace le joueur en arrière.
- * 
- * @details
- * - Utilise le vecteur dir et la vitesse
- * - Vérifie si le joueur est bloqué par un mur
- * 
- * @param game Le jeu en cours.
- * @param player Le joueur à déplacer.
- * @param speed La vitesse de déplacement.
- */
-static int	ft_move_player_down(t_game *game, t_player *player, double speed)
-{
-	t_coord	new_pos;
-
-	new_pos.x = player->pos.x - player->dir.x * speed;
-	new_pos.y = player->pos.y - player->dir.y * speed;
-	is_blocking(game, &new_pos);
-	player->pos.x = new_pos.x;
-	player->pos.y = new_pos.y;
-	return (1);
-}
-
-/**
- * @brief Déplace latéralement le joueur à gauche.
- * 
- * @details
- * - Utilise le vecteur dir et la vitesse
- * - Vérifie si le joueur est bloqué par un mur
- * 
- * @param game Le jeu en cours.
- * @param player Le joueur à déplacer.
- * @param speed La vitesse de déplacement.
- */
-static int	ft_move_player_left(t_game *game, t_player *player, double speed)
-{
-	t_coord	new_pos;
-
-	new_pos.x = player->pos.x + player->dir.y * speed;
-	new_pos.y = player->pos.y - player->dir.x * speed;
-	is_blocking(game, &new_pos);
-	player->pos.x = new_pos.x;
-	player->pos.y = new_pos.y;
-	return (1);
-}
-
-/**
- * @brief Déplace latéralement le joueur à droite.
- * 
- * @details
- * - Utilise le vecteur dir et la vitesse
- * - Vérifie si le joueur est bloqué par un mur
- * 
- * @param game Le jeu en cours.
- * @param player Le joueur à déplacer.
- * @param speed La vitesse de déplacement.
- */
-static int	ft_move_player_right(t_game *game, t_player *player, double speed)
-{
-	t_coord	new_pos;
-
-	new_pos.x = player->pos.x - player->dir.y * speed;
-	new_pos.y = player->pos.y + player->dir.x * speed;
-	is_blocking(game, &new_pos);
-	player->pos.x = new_pos.x;
-	player->pos.y = new_pos.y;
-	return (1);
-}
-
-/**
- * @brief Fonction principale de déplacement du joueur.
- * 
- * @details
- * - Récupère la vitesse actuelle (ft_speed)
- * - Appelle les fonctions de déplacement en fonction des touches pressées
- * - Prend en compte la rotation de la caméra
- */
-int	ft_move_player(t_game *game, t_player *player)
-{
-	double	speed;
-
-	ft_speed(game, player, &speed);
-	if (player->move & M_UP)
-		ft_move_player_up(game, player, speed);
-	if (player->move & M_DOWN)
-		ft_move_player_down(game, player, speed);
-	if (player->move & M_LEFT)
-		ft_move_player_left(game, player, speed);
-	if (player->move & M_RIGHT)
-		ft_move_player_right(game, player, speed);
-	if (player->move & M_VIEW_LEFT)
-		ft_move_player_view_left(game, player);
-	if (player->move & M_VIEW_RIGHT)
-		ft_move_player_view_right(game, player);
-	if (player->move & M_VIEW_UP)
-		ft_move_player_view_up(player);
-	if (player->move & M_VIEW_DOWN)
-		ft_move_player_view_down(player);
 	return (1);
 }

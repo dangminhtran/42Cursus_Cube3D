@@ -12,33 +12,118 @@
 
 #include "../cub3d.h"
 
+void	init_game(t_game *game)
+{
+	game->window.mlx_ptr = mlx_init();
+	if (!game->window.mlx_ptr)
+		exit_error(game, "MLX initialization failed");
+	
+	game->window.width = 1024;
+	game->window.height = 768;
+	game->window.win_ptr = mlx_new_window(game->window.mlx_ptr, 
+										game->window.width, 
+										game->window.height, 
+										"cub3D");
+	if (!game->window.win_ptr)
+		exit_error(game, "Window creation failed");
+
+	game->window.frame.img.img = mlx_new_image(game->window.mlx_ptr, 
+											game->window.width, 
+											game->window.height);
+	if (!game->window.frame.img.img)
+		exit_error(game, "Image creation failed");
+
+	game->window.frame.img.addr = mlx_get_data_addr(game->window.frame.img.img, 
+		&game->window.frame.img.bits_per_pixel, &game->window.frame.img.size_line, 
+		&game->window.frame.img.endian);
+	
+	init_player(game);
+}
+
+void	setup_hooks(t_game *game)
+{
+	mlx_hook(game->window.win_ptr, 2, 1L << 0, handle_keypress, game);
+	mlx_hook(game->window.win_ptr, 17, 0, close_window, game);
+	mlx_loop_hook(game->window.mlx_ptr, render_frame, game);
+}
+
+int	close_window(t_game *game)
+{
+	mlx_loop_end(game->window.mlx_ptr);
+	return (0);
+}
+
+void	exit_error(t_game *game, char *message)
+{
+	printf("Error: %s\n", message);
+	cleanup_game(game);
+	exit(1);
+}
+
+void	cleanup_game(t_game *game)
+{
+	if (game->window.frame.img.img)
+		mlx_destroy_image(game->window.mlx_ptr, game->window.frame.img.img);
+	if (game->window.win_ptr)
+		mlx_destroy_window(game->window.mlx_ptr, game->window.win_ptr);
+	if (game->window.mlx_ptr)
+	{
+		mlx_destroy_display(game->window.mlx_ptr);
+		free(game->window.mlx_ptr);
+	}
+	ft_free_data(&game->map);
+}
+
+void	get_player_spawn(t_game *game)
+{
+	int	i;
+	int	j;
+	
+	i = 0;
+	while (game->map.map[i])
+	{
+		j = 0;
+		while (game->map.map[i][j])
+		{
+			if (game->map.map[i][j] == 'N' || game->map.map[i][j] == 'S' ||
+				game->map.map[i][j] == 'E' || game->map.map[i][j] == 'W')
+			{
+				game->map.spawn.x = i;
+				game->map.spawn.y = j;
+				return;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 int	main(int ac, char **av)
 {
-	if (ac != 2)
-		return (printf("Need a map !\n"), 0);
-	t_display display;
-	t_map_data map_data;
-	t_textures textures;
+	t_game game;
 	
-	// ft_memset(&map_data, 0, sizeof(t_map_data));
-	// ft_memset(&display, 0, sizeof(t_display));
-	map_data.map = 0;
-	map_data.file_size = ft_get_map_size(av[1]);
-	map_data.map_file = malloc(sizeof(char *) * (map_data.file_size + 1));
-	map_data.textures = &textures;
-	if (!map_data.map_file)
-	return (0);
-	map_data.map_file = ft_stock_file(av[1], map_data.map_file);
-	init_data(&map_data);
-	if (general_parsing(&map_data, av) == -1)
+	if (ac != 2)
+		return (printf("Error: Need a map file!\n"), 1);
+	ft_memset(&game, 0, sizeof(t_game));
+
+	game.map.file_size = ft_get_map_size(av[1]);
+	game.map.map_file = malloc(sizeof(char *) * (game.map.file_size + 1));
+	if (!game.map.map_file)
+		return (printf("Error: Memory allocation failed\n"), 1);
+	
+	game.map.map_file = ft_stock_file(av[1], game.map.map_file);
+	init_data(&game.map);
+	game.map.textures = &game.textures;
+	
+	if (general_parsing(&game.map, av) == -1)
 	{
-		ft_free_data(&map_data);
-		return (0);
+		ft_free_data(&game.map);
+		return (1);
 	}
-	get_player_pos(&map_data, &display);
-	printf("x : %d\n", display.player_posx);
-	printf("y : %d\n", display.player_posy);
-	open_window(&display);
-	ft_free_data(&map_data);
+	get_player_spawn(&game);
+	init_game(&game);
+	setup_hooks(&game);
+	mlx_loop(game.window.mlx_ptr);
+	cleanup_game(&game);
 	return (0);
 }

@@ -23,7 +23,7 @@
 	free_mlx(display);
 } */
 
-// TODO - Test - Minh - A REFAIRE
+// TODO - Test Minh - A REFAIRE
 void	open_window(t_display *display)
 {
 	display->mlx_ptr = mlx_init();

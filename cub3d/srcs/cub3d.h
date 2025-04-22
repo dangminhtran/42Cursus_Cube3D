@@ -22,289 +22,195 @@
 # include <stdlib.h>
 # include <sys/stat.h>
 
-
-# define M_UP				0x00001
-# define M_DOWN				0x00002
-# define M_LEFT				0x00004
-# define M_RIGHT			0x00008
-
-# define M_VIEW_UP			0x00010
-# define M_VIEW_DOWN		0x00020
-# define M_VIEW_LEFT		0x00040
-# define M_VIEW_RIGHT		0x00080
-
-typedef struct s_display // TODO - PROBLEME ENTRE T_DISPLAY ET T_WINDOW
-{
-	void		*mlx_ptr;
-	void		*mlx_wind;
-	t_image		image; // Ajout - Test Minh
-	int			player_posx;
-	int			player_posy;
-}				t_display;
-
-typedef struct s_textures
-{
-	char		*no_texture;
-	char		*so_texture;
-	char		*we_texture;
-	char		*ea_texture;
-	char		*floor_color;
-	char		*ceiling_color;
-	int			ceiling_rgb[3];
-	int			floor_rgb[3];
-	char		**textures;
-}				t_textures;
-
-typedef struct s_map_data
-{typedef struct s_display // == t_window ?
-{
-	void		*mlx_ptr;
-	void		*mlx_wind;
-	int			player_posx;
-	int			player_posy;
-}				t_display;
-
-typedef struct s_textures
-{
-	char		*no_texture;
-	char		*so_texture;
-	char		*we_texture;
-	char		*ea_texture;
-	char		*floor_color;
-	char		*ceiling_color;
-	int			ceiling_rgb[3];
-	int			floor_rgb[3];
-	char		**textures;
-}				t_textures;
-
-typedef struct s_map_data
-{
-	char		**map_file;
-	char		**map;
-	char		**special_map;
-	int			map_width;
-	int			map_height;
-	int			file_size;
-	int			count;
-	t_vector	spawn;
-	t_textures	*textures;
-}				t_map_data;
-
-
-// Définition des directions
 typedef struct s_vector
 {
-	int		x;
-	int		y;
-}	t_vector;
+    int    x;
+    int    y;
+}    t_vector;
 
-// Définition des coordonnées
+
 typedef struct s_coord
 {
-	double		x;
-	double		y;
-}	t_coord;
+    double    x;
+    double    y;
+}    t_coord;
 
-// Définition de la fenêtre
-typedef struct s_window
-{
-	void		*mlx_ptr;
-	void		*win_ptr;
-	int			height;
-	int			width;
-	t_frame		frame;
-}	t_window;
 
 typedef struct s_image
 {
-	void		*img;
-	char		*addr;
-	t_vector	size;
-	int			bits_per_pixel;
-	int			size_line;
-	int			endian;
-}	t_image;
+    void        *img;
+    char        *addr;
+    t_vector    size;
+    int         bits_per_pixel;
+    int         size_line;
+    int         endian;
+}    t_image;
 
-typedef struct s_frame
+typedef struct s_frame 
 {
-	t_coord		ray_dir; // direction du rayon
-	t_vector	map; // position sur la grille de la carte
-	t_coord		side_dist; // distance jusqu'au prochain bord
-	t_coord		delta_dist; // distance a parcourir d'un bord a l'autre
-	t_coord		camera;
-	t_vector	step;
-	t_coord		wall; // coords de l'impact avec un mur
-	t_vector	mouse;
-	int			hit; // 0 si pas de mur, 1 si mur
-	char		hit_value; // valeur du mur touché
-	int			side; // quel coté du mur a été touché
-	double		perp_wall_dist; // distance perpendiculaire
-	int			line_height; // hauteur de la ligne a dessiner
-	int			draw_start; // debut de la ligne a dessiner
-	int			draw_end; // fin de la ligne a dessiner
-	int			color; // couleur du mur
-}	t_frame;
+    t_coord ray_dir;    // direction of the ray
+    t_vector map;       // position on the map grid
+    t_coord side_dist;  // distance to next x or y side
+    t_coord delta_dist; // distance between sides
+    t_vector step;      // step direction (either 1 or -1)
+    double perp_wall_dist; // perpendicular distance to the wall
+    int side;           // was a NS or EW wall hit?
+    int hit;            // was a wall hit?
+    char hit_value;     // what was hit
+    int line_height;    // height of the wall slice
+    int draw_start;     // where to start drawing the wall
+    int draw_end;       // where to end drawing the wall
+    t_coord camera;     // camera plane coordinates
+    t_image img;        // image for the current frame
+} t_frame;
 
-typedef struct s_player
+// Window structure
+typedef struct s_window 
 {
-	t_coord		pos;
-	t_coord		dir; // direction dans laquelle le joueur regarde
-	t_coord		plane; // le plan caméra pour calculer le champ de vision - raycasting
-	int			move;
-	double		speed;
-	double		rot_speed;
-}	t_player;
+    void *mlx_ptr;      // MLX pointer
+    void *win_ptr;      // Window pointer
+    int width;          // Window width
+    int height;         // Window height
+    t_frame frame;      // Frame data
+    int player_posx;    // Player position X (from t_display)
+    int player_posy;    // Player position Y (from t_display)
+} t_window;
 
-typedef struct s_settings
+
+typedef struct s_player 
 {
-	double		fov;
-	double		move_speed;
-	double		rot_speed;
-	double		cos_rot_speed;
-	double		sin_rot_speed;
-	double		cos_neg_rot_speed;
-	double		sin_neg_rot_speed;
-}	t_settings;
+    t_coord pos;        // Player position
+    t_coord dir;        // Direction vector
+    t_coord plane;      // Camera plane
+} t_player;
 
-typedef struct s_game
+
+typedef struct s_settings 
 {
-	t_window			window;
-	t_map_data			map;
-	t_textures		textures;
-	//		parsing;
-	t_frame			frame;
-	t_player		player;
-	t_settings		settings;
-}	t_game;
-	char		**map_file;
-	char		**map;
-	char		**special_map;
-	int			map_width;
-	int			map_height;
-	int			file_size;
-	int			count;
-	t_vector	spawn;
-	t_textures	*textures;
-}				t_map_data;
+    double move_speed;  // Movement speed
+    double rot_speed;   // Rotation speed
+    double cos_rot_speed;      // Precalculated cosine of rotation speed
+    double sin_rot_speed;      // Precalculated sine of rotation speed
+    double cos_neg_rot_speed;  // Precalculated cosine of negative rotation speed
+    double sin_neg_rot_speed;  // Precalculated sine of negative rotation speed
+} t_settings;
 
-
-// Définition des directions
-typedef struct s_vector
+typedef struct s_textures 
 {
-	int		x;
-	int		y;
-}	t_vector;
+    // Original textures from the map file
+    char **textures;    // Array of raw texture lines from map file
+    char *no_texture;   // North texture path
+    char *so_texture;   // South texture path
+    char *we_texture;   // West texture path
+    char *ea_texture;   // East texture path
+    char *floor_color;  // Floor color string
+    char *ceiling_color; // Ceiling color string
+    
+    // Processed texture data
+    char *north_path;   // Path to north texture
+    char *south_path;   // Path to south texture
+    char *west_path;    // Path to west texture
+    char *east_path;    // Path to east texture
+    int floor_rgb[3];   // Floor RGB values
+    int ceiling_rgb[3]; // Ceiling RGB values
+} t_textures;
 
-// Définition des coordonnées
-typedef struct s_coord
-{
-	double		x;
-	double		y;
-}	t_coord;
+typedef struct s_map_data {
+    char **map;         // 2D map array
+    char **map_file;    // Raw map file content
+    char **special_map; // Map with borders for validation
+    int map_width;      // Map width
+    int map_height;     // Map height
+    int file_size;      // File size
+    int count;          // Texture count
+    t_vector spawn;     // Player spawn position
+    t_textures *textures; // Textures data
+} t_map_data;
 
-// Définition de la fenêtre
-typedef struct s_window
-{
-	void		*mlx_ptr;
-	void		*win_ptr;
-	int			height;
-	int			width;
-	t_frame		frame;
-}	t_window;
-
-typedef struct s_image
-{
-	void		*img;
-	char		*addr;
-	t_vector	size;
-	int			bits_per_pixel;
-	int			size_line;
-	int			endian;
-}	t_image;
-
-typedef struct s_frame
-{
-	t_coord		ray_dir; // direction du rayon
-	t_vector	map; // position sur la grille de la carte
-	t_coord		side_dist; // distance jusqu'au prochain bord
-	t_coord		delta_dist; // distance a parcourir d'un bord a l'autre
-	t_coord		camera;
-	t_vector	step;
-	t_coord		wall; // coords de l'impact avec un mur
-	t_vector	mouse;
-	int			hit; // 0 si pas de mur, 1 si mur
-	char		hit_value; // valeur du mur touché
-	int			side; // quel coté du mur a été touché
-	double		perp_wall_dist; // distance perpendiculaire
-	int			line_height; // hauteur de la ligne a dessiner
-	int			draw_start; // debut de la ligne a dessiner
-	int			draw_end; // fin de la ligne a dessiner
-	int			color; // couleur du mur
-}	t_frame;
-
-typedef struct s_player
-{
-	t_coord		pos;
-	t_coord		dir; // direction dans laquelle le joueur regarde
-	t_coord		plane; // le plan caméra pour calculer le champ de vision - raycasting
-	int			move;
-	double		speed;
-	double		rot_speed;
-}	t_player;
-
-typedef struct s_settings
-{
-	double		fov;
-	double		move_speed;
-	double		rot_speed;
-	double		cos_rot_speed;
-	double		sin_rot_speed;
-	double		cos_neg_rot_speed;
-	double		sin_neg_rot_speed;
-}	t_settings;
-
-typedef struct s_game
-{
-	t_window			window;
-	t_map_data			map;
-	t_textures		textures;
-	//		parsing;
-	t_frame			frame;
-	t_player		player;
-	t_settings		settings;
-}	t_game;
+typedef struct s_game {
+    t_window window; 
+	t_frame frame;
+    t_map_data map;
+    t_player player;
+    t_settings settings;
+    t_textures textures;
+} t_game;
 
 
-void			open_window(t_display *display);
-int				quit(t_display *display);
-int				keypress(int keycode, t_display *display);
-void			free_mlx(t_display *display);
-char			**ft_stock_file(char *name_file, char **tab);
-int				ft_get_map_size(char *name_file);
-int				is_empty_line(char *line);
-void			get_map_width(t_map_data *map_data, int count, char **map);
-int				get_only_map(t_map_data *map_data, int start_index);
-int				get_textures(t_map_data *map_data);
-int				parse_textures_lines(t_textures *textures);
-int				general_parsing(t_map_data *map_data, char **av);
-void			ft_free(char **map, int count);
-void			ft_free_data(t_map_data *map_data);
-int				check_map_char(char **map);
-int				parse_map(t_map_data *map_data);
-int				ft_strlen2(char *str);
-void			init_data(t_map_data *map_data);
-void			init_textures(t_textures *textures);
-int				check_doubles(char **map);
-void			get_special_map(t_map_data *map_data);
-int				find_empty_area(t_map_data *map_data);
-int				check_around(int i, int j, char **map);
-int				ft_is_space(char c);
-int				get_ceiling_rgb(t_textures *textures);
-int				get_floor_rgb(t_textures *textures);
-int				only_numbers_or_space(char *line);
-int				is_valid_rgb(char *line);
-int				line_counter(char **tableau);
-void			get_player_pos(t_map_data *map_data, t_display *display);
-int				is_valid_extension(char *str);
+/* cub3d.c */
+void init_game(t_game *game);
+void setup_hooks(t_game *game);
+int close_window(t_game *game);
+void exit_error(t_game *game, char *message);
+void cleanup_game(t_game *game);
+void get_player_spawn(t_game *game);
+
+/* move_player.c */
+int handle_keypress(int keycode, t_game *game);
+void move_forward(t_game *game);
+void move_backward(t_game *game);
+void strafe_left(t_game *game);
+void strafe_right(t_game *game);
+void rotate_left(t_game *game);
+void rotate_right(t_game *game);
+int is_valid_position(t_game *game, double x, double y);
+
+/* raycasting.c */
+void init_player(t_game *game);
+void cast_rays(t_game *game);
+void perform_dda(t_game *game);
+void draw_vertical_line(t_game *game, int x);
+void put_pixel(t_game *game, int x, int y, int color);
+int render_frame(t_game *game);
+void clear_image(t_game *game);
+
+/* parser functions */
+int ft_get_map_size(char *path);
+char **ft_stock_file(char *path, char **map);
+void init_data(t_map_data *map_data);
+int general_parsing(t_map_data *map_data, char **av);
+void ft_free_data(t_map_data *map_data);
+
+/* get_map.c */
+int get_only_map(t_map_data *map_data, int start_index);
+void get_map_width(t_map_data *map_data, int count, char **map);
+void get_special_map(t_map_data *map_data);
+
+/* get_data.c */
+int get_textures(t_map_data *map_data);
+int line_counter(char **tableau);
+void get_player_pos(t_map_data *map_data, t_window *window);
+
+/* parse_data.c */
+int parse_textures_lines(t_textures *textures);
+int ft_is_space(char c);
+int get_ceiling_rgb(t_textures *textures);
+int get_floor_rgb(t_textures *textures);
+int is_valid_rgb(char *line);
+
+/* parse_map.c */
+int check_map_char(char **map);
+int check_doubles(char **map);
+int find_empty_area(t_map_data *map_data);
+int check_around(int i, int j, char **map);
+int parse_map(t_map_data *map_data);
+
+/* parsing.c */
+int general_parsing(t_map_data *map_data, char **av);
+int is_valid_extension(char *str);
+
+/* utils_parsing.c */
+int is_empty_line(char *line);
+void ft_free(char **map, int count);
+void ft_free_data(t_map_data *map_data);
+int ft_strlen2(char *str);
+void init_data(t_map_data *map_data);
+void init_textures(t_textures *textures);
+
+// PAS UTILISES
+void open_window(t_window *window);
+int quit(t_window *window);
+int keypress(int keycode, t_window *window);
+void free_mlx(t_window *window);
 
 #endif

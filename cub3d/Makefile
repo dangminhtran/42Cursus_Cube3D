@@ -1,37 +1,44 @@
 ####################################################
 # DEFINITION :
-
 NAME = cub3d
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -g
-LIBFT = lib/libft
-FT_LIBFT = lib/libft/libft.a
-MLX = lib/minilibx-linux/libmlx_Linux.a
-SRCES = srcs/main/cub3d.c srcs/exec/display.c srcs/parsing/stock_file.c srcs/get_next_line/get_next_line_utils.c \
+LIBFT_DIR = lib/libft
+LIBFT = $(LIBFT_DIR)/libft.a
+MLX_DIR = lib/minilibx-linux
+MLX = $(MLX_DIR)/libmlx.a
+INCLUDES = -I./includes -I$(MLX_DIR) -I$(LIBFT_DIR)
+
+SRCES = srcs/main/cub3d.c srcs/parsing/stock_file.c srcs/get_next_line/get_next_line_utils.c \
 srcs/get_next_line/get_next_line.c srcs/parsing/get_data.c srcs/parsing/get_map.c srcs/parsing/parsing.c \
-srcs/parsing/utils_parsing.c srcs/parsing/parse_map.c srcs/parsing/parse_data.c \
+srcs/parsing/utils_parsing.c srcs/parsing/parse_map.c srcs/parsing/parse_data.c srcs/player/move_player.c \
+srcs/render/raycasting.c
 
 OBJECTS = $(SRCES:.c=.o)
 
 ####################################################
 # RULES
+all: $(MLX) $(LIBFT) $(NAME)
 
-all: $(NAME)
+$(MLX):
+	$(MAKE) -C $(MLX_DIR)
+
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJECTS)
-	$(MAKE) -C $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(FT_LIBFT) $(MLX) -lXext -lX11
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(LIBFT) $(MLX) -lXext -lX11 -lm
 
 ####################################################
 # CLEAR/RESET
-
 clean:
 	rm -f $(OBJECTS)
-	$(MAKE) -C $(LIBFT) clean
+	$(MAKE) -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(MLX_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT) fclean
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
@@ -39,7 +46,5 @@ re: fclean all
 
 ####################################################
 # PATTERN RULE TO COMPILE .c FILES TO .o FILES
-
-# Generic rule to compile .c to .o
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I./lib/minilibx-linux/
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@

@@ -52,27 +52,27 @@ int	line_counter(char **tableau)
 	return (i);
 }
 
-void	get_player_pos(t_map_data *map_data, t_display *display)
+void get_player_pos(t_map_data *map_data, t_window *window)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (map_data->map[i])
-	{
-		printf("%s", map_data->map[i]);
-		j = 0;
-		while (map_data->map[i][j])
-		{
-			if (map_data->map[i][j] == 'N' || map_data->map[i][j] == 'S'
-				|| map_data->map[i][j] == 'E' || map_data->map[i][j] == 'W')
-			{
-				display->player_posx = i;
-				display->player_posy = j;
-			}
-			j++;
-		}
-		i++;
-	}
+    int i;
+    int j;
+    
+    i = 0;
+    j = 0;
+    while (map_data->map[i])
+    {
+        printf("%s", map_data->map[i]);
+        j = 0;
+        while (map_data->map[i][j])
+        {
+            if (map_data->map[i][j] == 'N' || map_data->map[i][j] == 'S'
+                || map_data->map[i][j] == 'E' || map_data->map[i][j] == 'W')
+            {
+                window->player_posx = i;
+                window->player_posy = j;
+            }
+            j++;
+        }
+        i++;
+    }
 }
