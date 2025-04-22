@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dangtran <dangtran@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:05:34 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/17 14:51:49 by dangtran         ###   ########.fr       */
+/*   Updated: 2025/04/22 18:13:56 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/stat.h>
+# include <X11/X.h>
+# include <X11/keysym.h>
 
 typedef struct s_vector
 {

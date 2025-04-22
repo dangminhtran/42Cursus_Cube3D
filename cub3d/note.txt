@@ -7,14 +7,14 @@ ensuite on stock la map
 TODO 
 1. Faire les hooks
 - pour les touches du clavier
-- pour la souris 
+- pour la souris - DONE
 
 2. Les inits
 - Init les coordonnées -  DONE
 - Init les vecteurs - DONE
 - Init la window - DONE
 - Init la frame - DONE
-- Init la map
+- Init la map - DONE (init_data)
 - Init l'image
 - Init les textures
 - Init le player - WIP

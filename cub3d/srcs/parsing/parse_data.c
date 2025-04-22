@@ -6,12 +6,13 @@
 /*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 17:09:53 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/09 14:45:44 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:17:41 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
+// TODO - Verifier si on peut acceder au fichier de la texture
 int	parse_textures_lines(t_textures *textures)
 {
 	int		i;

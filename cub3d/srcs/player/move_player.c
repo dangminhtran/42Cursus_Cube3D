@@ -1,5 +1,5 @@
 #include "../cub3d.h"
-
+// TODO - rajouter fonctions : moove_right / moove_left
 int	handle_keypress(int keycode, t_game *game)
 {
 	if (keycode == 65307) // ESC
@@ -7,13 +7,13 @@ int	handle_keypress(int keycode, t_game *game)
 		mlx_loop_end(game->window.mlx_ptr);
 		return (0);
 	}
-	if (keycode == 119)
+	if (keycode == XK_w)
 		move_forward(game);
-	if (keycode == 115)
+	if (keycode == XK_s)
 		move_backward(game);
-	if (keycode == 97 || keycode == 65361)
+	if (keycode == XK_Right)
 		rotate_left(game);
-	if (keycode == 100 || keycode == 65363)
+	if (keycode == XK_Left)
 		rotate_right(game);
 	return (0);
 }
