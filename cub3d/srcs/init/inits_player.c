@@ -77,14 +77,14 @@ static int	set_dir_player(t_game *game, char c)
  * - La position du joueur est initialisée à (x + 0.5, y + 0.5) pour le centrer sur le carré de la carte.
  * - La vitesse de mouvement est initialisée à la vitesse de mouvement définie dans les paramètres.
  */
-int	ft_init_player(t_game *game)
-{
-	set_dir_player(game,
-		game->map.map[game->map.spawn.y][game->map.spawn.x]);
-	game->map.map[game->map.spawn.y][game->map.spawn.x] = '0';
-	ft_init_coord(&game->player.pos, game->map.spawn.x + 0.5,
-		game->map.spawn.y + 0.5);
-	game->player.speed = game->settings.move_speed;
-	game->player.rot_speed = game->settings.rot_speed;
-	return (1);
-}
+// int	ft_init_player(t_game *game)
+// {
+// 	set_dir_player(game,
+// 		game->map.map[game->map.spawn.y][game->map.spawn.x]);
+// 	game->map.map[game->map.spawn.y][game->map.spawn.x] = '0';
+// 	ft_init_coord(&game->player.pos, game->map.spawn.x + 0.5,
+// 		game->map.spawn.y + 0.5);
+// 	game->player.speed = game->settings.move_speed;
+// 	game->player.rot_speed = game->settings.rot_speed;
+// 	return (1);
+// }
