@@ -2,8 +2,8 @@
 
 void	init_player(t_game *game)
 {
-	game->player.pos.x = game->map.spawn.y + 0.5;  // Centre de la cellule
-	game->player.pos.y = game->map.spawn.x + 0.5;
+	game->player.pos.x = game->map.spawn.x + 0.5;  // Centre de la cellule
+	game->player.pos.y = game->map.spawn.y + 0.5;
 
 	if (game->map.map[game->map.spawn.x][game->map.spawn.y] == 'N')
 	{
