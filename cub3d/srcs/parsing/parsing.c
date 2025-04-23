@@ -42,6 +42,3 @@ int	is_valid_extension(char *str)
 		return (printf("error file name\n"), 1);
 	return (0);
 }
-
-// TODO - Verifier si c'est un .cub       ---DONE---
-// TODO - Stocker la data du player (pos) ---DONE---

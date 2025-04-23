@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../cub3d.h"
 
 /* void	open_window(t_display *display)
@@ -58,14 +57,6 @@ int	quit(t_display *display)
 {
 	mlx_loop_end(display->mlx_ptr);
 	return (0);
-}
-
-void	free_mlx(t_display *display)
-{
-	mlx_clear_window(display->mlx_ptr, display->mlx_wind);
-	mlx_destroy_window(display->mlx_ptr, display->mlx_wind);
-	mlx_destroy_display(display->mlx_ptr);
-	free(display->mlx_ptr);
 }
 
 void verLine(t_display *info, int x, int y1, int y2, int color)

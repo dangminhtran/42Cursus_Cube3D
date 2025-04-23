@@ -79,7 +79,6 @@ int	find_empty_area(t_map_data *map_data)
 		j = 0;
 		while (j < map_data->map_width - 1)
 		{
-			// printf("teeeeeeeest\n");
 			if (map_data->special_map[i][j] == '0'
 				|| map_data->special_map[i][j] == 'N'
 				|| map_data->special_map[i][j] == 'S'

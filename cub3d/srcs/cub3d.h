@@ -66,7 +66,6 @@ typedef struct s_frame
     t_image img;        // image for the current frame
 } t_frame;
 
-// Window structure
 typedef struct s_window 
 {
     void *mlx_ptr;      // MLX pointer
@@ -78,14 +77,12 @@ typedef struct s_window
     int player_posy;    // Player position Y (from t_display)
 } t_window;
 
-
 typedef struct s_player 
 {
     t_coord pos;        // Player position
     t_coord dir;        // Direction vector
     t_coord plane;      // Camera plane
 } t_player;
-
 
 typedef struct s_settings 
 {
@@ -138,7 +135,6 @@ typedef struct s_game {
     t_textures textures;
 } t_game;
 
-
 /* cub3d.c */
 void init_game(t_game *game);
 void setup_hooks(t_game *game);
@@ -151,8 +147,8 @@ void get_player_spawn(t_game *game);
 int handle_keypress(int keycode, t_game *game);
 void move_forward(t_game *game);
 void move_backward(t_game *game);
-void strafe_left(t_game *game);
-void strafe_right(t_game *game);
+void move_left(t_game *game);
+void move_right(t_game *game);
 void rotate_left(t_game *game);
 void rotate_right(t_game *game);
 int is_valid_position(t_game *game, double x, double y);
@@ -166,12 +162,9 @@ void put_pixel(t_game *game, int x, int y, int color);
 int render_frame(t_game *game);
 void clear_image(t_game *game);
 
-/* parser functions */
+/* stock_file.c */
 int ft_get_map_size(char *path);
 char **ft_stock_file(char *path, char **map);
-void init_data(t_map_data *map_data);
-int general_parsing(t_map_data *map_data, char **av);
-void ft_free_data(t_map_data *map_data);
 
 /* get_map.c */
 int get_only_map(t_map_data *map_data, int start_index);
@@ -211,8 +204,7 @@ void init_textures(t_textures *textures);
 
 // PAS UTILISES
 void open_window(t_window *window);
-int quit(t_window *window);
-int keypress(int keycode, t_window *window);
-void free_mlx(t_window *window);
+
+
 
 #endif

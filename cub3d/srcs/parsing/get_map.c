@@ -29,7 +29,6 @@ int	get_only_map(t_map_data *map_data, int start_index)
 	while (map_data->map_file[++i])
 	{
 		map_data->map[count] = ft_strdup(map_data->map_file[i]);
-		// printf("%s", map_data->map[count]);
 		if (!map_data->map[count])
 		{
 			ft_free(map_data->map_file, count - 1);

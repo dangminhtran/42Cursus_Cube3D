@@ -1,8 +1,8 @@
 #include "../cub3d.h"
-// TODO - rajouter fonctions : moove_right / moove_left
+
 int	handle_keypress(int keycode, t_game *game)
 {
-	if (keycode == 65307) // ESC
+	if (keycode == 65307)
 	{
 		mlx_loop_end(game->window.mlx_ptr);
 		return (0);
@@ -11,14 +11,18 @@ int	handle_keypress(int keycode, t_game *game)
 		move_forward(game);
 	if (keycode == XK_s)
 		move_backward(game);
+	if (keycode == XK_a)
+		move_left(game);
+	if (keycode == XK_d)
+		move_right(game);
 	if (keycode == XK_Right)
 		rotate_left(game);
 	if (keycode == XK_Left)
 		rotate_right(game);
+
 	return (0);
 }
 
-// TODO - Ne marche pas
 void	move_forward(t_game *game)
 {
 	double new_x = game->player.pos.x + game->player.dir.x * game->settings.move_speed;
@@ -37,6 +41,36 @@ void	move_backward(t_game *game)
 	double new_y = game->player.pos.y - game->player.dir.y * game->settings.move_speed;
 	
 	// Check si c'est un mur
+	if (is_valid_position(game, new_x, game->player.pos.y))
+		game->player.pos.x = new_x;
+	if (is_valid_position(game, game->player.pos.x, new_y))
+		game->player.pos.y = new_y;
+}
+
+void	move_left(t_game *game)
+{
+	// Perpendiculaire à la direction (gauche)
+	double perp_x = -game->player.dir.y;
+	double perp_y = game->player.dir.x;
+	
+	double new_x = game->player.pos.x + perp_x * game->settings.move_speed;
+	double new_y = game->player.pos.y + perp_y * game->settings.move_speed;
+	
+	if (is_valid_position(game, new_x, game->player.pos.y))
+		game->player.pos.x = new_x;
+	if (is_valid_position(game, game->player.pos.x, new_y))
+		game->player.pos.y = new_y;
+}
+
+void	move_right(t_game *game)
+{
+	// Perpendiculaire à la direction (droite)
+	double perp_x = game->player.dir.y;
+	double perp_y = -game->player.dir.x;
+	
+	double new_x = game->player.pos.x + perp_x * game->settings.move_speed;
+	double new_y = game->player.pos.y + perp_y * game->settings.move_speed;
+	
 	if (is_valid_position(game, new_x, game->player.pos.y))
 		game->player.pos.x = new_x;
 	if (is_valid_position(game, game->player.pos.x, new_y))

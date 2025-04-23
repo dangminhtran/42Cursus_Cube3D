@@ -17,7 +17,7 @@ void	init_game(t_game *game)
 	game->window.mlx_ptr = mlx_init();
 	if (!game->window.mlx_ptr)
 		exit_error(game, "MLX initialization failed");
-	
+		
 	game->window.width = 1024;
 	game->window.height = 768;
 	game->window.win_ptr = mlx_new_window(game->window.mlx_ptr, 
