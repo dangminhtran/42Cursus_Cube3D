@@ -7,13 +7,13 @@ int	handle_keypress(int keycode, t_game *game)
 		mlx_loop_end(game->window.mlx_ptr);
 		return (0);
 	}
-	if (keycode == XK_w)
+	if (keycode == XK_w || keycode == XK_W)
 		move_forward(game);
-	if (keycode == XK_s)
+	if (keycode == XK_s || keycode == XK_S)
 		move_backward(game);
-	if (keycode == XK_a)
+	if (keycode == XK_d || keycode == XK_D)
 		move_left(game);
-	if (keycode == XK_d)
+	if (keycode == XK_a || keycode == XK_A)
 		move_right(game);
 	if (keycode == XK_Right)
 		rotate_left(game);
