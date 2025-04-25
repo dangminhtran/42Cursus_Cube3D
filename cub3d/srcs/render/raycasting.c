@@ -34,8 +34,8 @@ void	init_player(t_game *game)
 		game->player.plane.y = -0.66;
 	}
 
-	game->settings.move_speed = 0.05;
-	game->settings.rot_speed = 0.03;
+	game->settings.move_speed = 0.01;
+	game->settings.rot_speed = 0.01;
 	
 	// Valeurs trigos pour la vitesse de rotation
 	game->settings.cos_rot_speed = cos(game->settings.rot_speed);
@@ -255,6 +255,7 @@ int	render_frame(t_game *game)
 {
 	clear_image(game);
 	cast_rays(game);
+	update_game_state(game);
 	mlx_put_image_to_window(game->window.mlx_ptr, game->window.win_ptr, 
 							game->window.frame.img.img, 0, 0);
 	return (0);

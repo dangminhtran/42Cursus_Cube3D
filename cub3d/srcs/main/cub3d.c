@@ -6,14 +6,52 @@
 /*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:16:01 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/16 16:46:33 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:47:11 by yamartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void    init_game(t_game *game)
+// void    init_game(t_game *game)
+// {
+//     game->window.mlx_ptr = mlx_init();
+//     if (!game->window.mlx_ptr)
+//         exit_error(game, "MLX initialization failed");
+    
+//     game->window.width = 1024;
+//     game->window.height = 768;
+//     game->window.win_ptr = mlx_new_window(game->window.mlx_ptr, 
+//                                           game->window.width, 
+//                                           game->window.height, 
+//                                           "cub3D");
+//     if (!game->window.win_ptr)
+//         exit_error(game, "Window creation failed");
+//     game->window.frame.img.img = mlx_new_image(game->window.mlx_ptr, 
+//                                               game->window.width, 
+//                                               game->window.height);
+//     if (!game->window.frame.img.img)
+//         exit_error(game, "Image creation failed");
+    
+//     game->window.frame.img.addr = mlx_get_data_addr(game->window.frame.img.img, 
+//                                                   &game->window.frame.img.bits_per_pixel, 
+//                                                   &game->window.frame.img.size_line, 
+//                                                   &game->window.frame.img.endian);
+// 	// verify_texture_files(game);
+//     load_textures(game);
+//     init_player(game);
+// }
+
+
+void init_game(t_game *game)
 {
+    // Initialisation des touches
+    game->keys.forward = 0;
+    game->keys.backward = 0;
+    game->keys.left = 0;
+    game->keys.right = 0;
+    game->keys.rot_left = 0;
+    game->keys.rot_right = 0;
+    
     game->window.mlx_ptr = mlx_init();
     if (!game->window.mlx_ptr)
         exit_error(game, "MLX initialization failed");
@@ -36,14 +74,16 @@ void    init_game(t_game *game)
                                                   &game->window.frame.img.bits_per_pixel, 
                                                   &game->window.frame.img.size_line, 
                                                   &game->window.frame.img.endian);
-	// verify_texture_files(game);
+    // verify_texture_files(game);
     load_textures(game);
     init_player(game);
 }
 
+
 void	setup_hooks(t_game *game)
 {
 	mlx_hook(game->window.win_ptr, 2, 1L << 0, handle_keypress, game);
+	mlx_hook(game->window.win_ptr, 3, 1L << 1, handle_keyrelease, game);
 	mlx_hook(game->window.win_ptr, 17, 0, close_window, game);
 	mlx_loop_hook(game->window.mlx_ptr, render_frame, game);
 }
