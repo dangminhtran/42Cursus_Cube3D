@@ -34,7 +34,7 @@ void	init_player(t_game *game)
 		game->player.plane.y = -0.66;
 	}
 
-	game->settings.move_speed = 0.05;
+	game->settings.move_speed = 0.03;
 	game->settings.rot_speed = 0.03;
 	
 	// Valeurs trigos pour la vitesse de rotation
