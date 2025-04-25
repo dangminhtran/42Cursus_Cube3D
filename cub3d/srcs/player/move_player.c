@@ -25,7 +25,7 @@
 
 int	handle_keypress(int keycode, t_game *game)
 {
-	if (keycode == 65307) // ESC
+	if (keycode == 65307)
 	{
 		mlx_loop_end(game->window.mlx_ptr);
 		return (0);
@@ -35,13 +35,13 @@ int	handle_keypress(int keycode, t_game *game)
 	if (keycode == XK_s || keycode == XK_S)
 		game->keys.backward = 1;
 	if (keycode == XK_a || keycode == XK_A)
-		game->keys.left = 1; // Gauche
+		game->keys.left = 1;
 	if (keycode == XK_d || keycode == XK_D)
-		game->keys.right = 1; // Droite
+		game->keys.right = 1;
 	if (keycode == XK_Right)
-		game->keys.rot_right = 1; // Rotation droite
+		game->keys.rot_right = 1;
 	if (keycode == XK_Left)
-		game->keys.rot_left = 1; // Rotation gauche
+		game->keys.rot_left = 1;
 	return (0);
 }
 
@@ -52,13 +52,13 @@ int	handle_keyrelease(int keycode, t_game *game)
 	if (keycode == XK_s || keycode == XK_S)
 		game->keys.backward = 0;
 	if (keycode == XK_a || keycode == XK_A)
-		game->keys.left = 0; // Gauche
+		game->keys.left = 0;
 	if (keycode == XK_d || keycode == XK_D)
-		game->keys.right = 0; // Droite
+		game->keys.right = 0;
 	if (keycode == XK_Right)
-		game->keys.rot_right = 0; // Rotation droite
+		game->keys.rot_right = 0;
 	if (keycode == XK_Left)
-		game->keys.rot_left = 0; // Rotation gauche
+		game->keys.rot_left = 0;
 	return (0);
 }
 
@@ -76,22 +76,6 @@ void	update_game_state(t_game *game)
 		rotate_right(game);
 	if (game->keys.rot_right)
 		rotate_left(game);
-}
-
-void	update_game(t_game *game)
-{
-	if (game->keys.forward)
-		move_forward(game);
-	if (game->keys.backward)
-		move_backward(game);
-	if (game->keys.left)
-		move_left(game);
-	if (game->keys.right)
-		move_right(game);
-	if (game->keys.rot_left)
-		rotate_left(game);
-	if (game->keys.rot_right)
-		rotate_right(game);
 }
 
 void	move_forward(t_game *game)

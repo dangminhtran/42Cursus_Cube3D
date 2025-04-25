@@ -169,7 +169,6 @@ void			rotate_left(t_game *game);
 void			rotate_right(t_game *game);
 int				is_valid_position(t_game *game, double x, double y);
 int				handle_keyrelease(int keycode, t_game *game);
-void			update_game(t_game *game);
 void			update_game_state(t_game *game);
 
 /* raycasting.c */
