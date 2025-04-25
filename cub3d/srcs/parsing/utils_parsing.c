@@ -37,24 +37,25 @@ void	ft_free(char **map, int count)
 	free(map);
 }
 
-void	ft_free_data(t_map_data *map_data)
+void ft_free_data(t_map_data *map_data)
 {
-	if (!map_data->textures)
-		return ;
-	if (map_data->textures->no_texture)
-		free(map_data->textures->no_texture);
-	if (map_data->textures->so_texture)
-		free(map_data->textures->so_texture);
-	if (map_data->textures->we_texture)
-		free(map_data->textures->we_texture);
-	if (map_data->textures->ea_texture)
-		free(map_data->textures->ea_texture);
-	if (map_data->textures->textures)
-		ft_free(map_data->textures->textures, map_data->count);
-	if (map_data->map_file)
-		ft_free(map_data->map_file, map_data->file_size);
-	if (map_data->map)
-		ft_free(map_data->map, map_data->map_height);
+    if (!map_data->textures)
+        return;
+
+    if (map_data->textures->no_texture)
+        free(map_data->textures->no_texture);
+    if (map_data->textures->so_texture)
+        free(map_data->textures->so_texture);
+    if (map_data->textures->we_texture)
+        free(map_data->textures->we_texture);
+    if (map_data->textures->ea_texture)
+        free(map_data->textures->ea_texture);
+    if (map_data->textures->textures)
+        ft_free(map_data->textures->textures, map_data->count);
+    if (map_data->map_file)
+        ft_free(map_data->map_file, map_data->file_size);
+    if (map_data->map)
+        ft_free(map_data->map, map_data->map_height);
 }
 
 int	ft_strlen2(char *str)

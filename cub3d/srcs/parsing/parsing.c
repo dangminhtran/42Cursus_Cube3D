@@ -23,6 +23,7 @@ int	general_parsing(t_map_data *map_data, char **av)
 		return (-1);
 	if (parse_textures_lines(map_data->textures) == -1)
 		return (-1);
+	setup_texture_paths(map_data->textures);
 	if (get_only_map(map_data, start_map_index) == -1)
 		return (-1);
 	if (parse_map(map_data) == -1)

@@ -30,7 +30,6 @@ typedef struct s_vector
     int    y;
 }    t_vector;
 
-
 typedef struct s_coord
 {
     double    x;
@@ -94,24 +93,28 @@ typedef struct s_settings
     double sin_neg_rot_speed;  // Precalculated sine of negative rotation speed
 } t_settings;
 
-typedef struct s_textures 
-{
-    // Original textures from the map file
-    char **textures;    // Array of raw texture lines from map file
-    char *no_texture;   // North texture path
-    char *so_texture;   // South texture path
-    char *we_texture;   // West texture path
-    char *ea_texture;   // East texture path
-    char *floor_color;  // Floor color string
-    char *ceiling_color; // Ceiling color string
-    
-    // Processed texture data
-    char *north_path;   // Path to north texture
-    char *south_path;   // Path to south texture
-    char *west_path;    // Path to west texture
-    char *east_path;    // Path to east texture
-    int floor_rgb[3];   // Floor RGB values
-    int ceiling_rgb[3]; // Ceiling RGB values
+typedef struct s_textures {
+    char **textures;      // Array of raw texture lines from map file
+    char *no_texture;     // North texture path
+    char *so_texture;     // South texture path
+    char *we_texture;     // West texture path
+    char *ea_texture;     // East texture path
+    char *floor_color;    // Floor color string
+    char *ceiling_color;  // Ceiling color string
+
+    char *north_path;     // Path to north texture
+    char *south_path;     // Path to south texture
+    char *west_path;      // Path to west texture
+    char *east_path;      // Path to east texture
+    int floor_rgb[3];     // Floor RGB values
+    int ceiling_rgb[3];   // Ceiling RGB values
+
+    t_image north_img;      // North texture image
+    t_image south_img;      // South texture image
+    t_image east_img;       // East texture image
+    t_image west_img;       // West texture image
+    int tex_width;        // Width of textures
+    int tex_height;       // Height of textures
 } t_textures;
 
 typedef struct s_map_data {
@@ -162,6 +165,13 @@ void put_pixel(t_game *game, int x, int y, int color);
 int render_frame(t_game *game);
 void clear_image(t_game *game);
 
+/* texture.c */
+void setup_texture_paths(t_textures *textures);
+void    load_textures(t_game *game);
+int     get_texture_color(t_image *img, int x, int y);
+void    cleanup_textures(t_game *game);
+void print_texture_paths(t_textures *textures);
+
 /* stock_file.c */
 int ft_get_map_size(char *path);
 char **ft_stock_file(char *path, char **map);
@@ -177,6 +187,7 @@ int line_counter(char **tableau);
 void get_player_pos(t_map_data *map_data, t_window *window);
 
 /* parse_data.c */
+char *trim_path(char *path);
 int parse_textures_lines(t_textures *textures);
 int ft_is_space(char c);
 int get_ceiling_rgb(t_textures *textures);
@@ -202,9 +213,10 @@ int ft_strlen2(char *str);
 void init_data(t_map_data *map_data);
 void init_textures(t_textures *textures);
 
-// PAS UTILISES
+// PAS UTILISES - TODO - A MERGE
 void open_window(t_window *window);
-
-
+int quit(t_window *window);
+int keypress(int keycode, t_window *window);
+void free_mlx(t_window *window);
 
 #endif

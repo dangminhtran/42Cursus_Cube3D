@@ -12,32 +12,33 @@
 
 #include "../cub3d.h"
 
-void	init_game(t_game *game)
+void    init_game(t_game *game)
 {
-	game->window.mlx_ptr = mlx_init();
-	if (!game->window.mlx_ptr)
-		exit_error(game, "MLX initialization failed");
-		
-	game->window.width = 1024;
-	game->window.height = 768;
-	game->window.win_ptr = mlx_new_window(game->window.mlx_ptr, 
-										game->window.width, 
-										game->window.height, 
-										"cub3D");
-	if (!game->window.win_ptr)
-		exit_error(game, "Window creation failed");
-
-	game->window.frame.img.img = mlx_new_image(game->window.mlx_ptr, 
-											game->window.width, 
-											game->window.height);
-	if (!game->window.frame.img.img)
-		exit_error(game, "Image creation failed");
-
-	game->window.frame.img.addr = mlx_get_data_addr(game->window.frame.img.img, 
-		&game->window.frame.img.bits_per_pixel, &game->window.frame.img.size_line, 
-		&game->window.frame.img.endian);
-	
-	init_player(game);
+    game->window.mlx_ptr = mlx_init();
+    if (!game->window.mlx_ptr)
+        exit_error(game, "MLX initialization failed");
+    
+    game->window.width = 1024;
+    game->window.height = 768;
+    game->window.win_ptr = mlx_new_window(game->window.mlx_ptr, 
+                                          game->window.width, 
+                                          game->window.height, 
+                                          "cub3D");
+    if (!game->window.win_ptr)
+        exit_error(game, "Window creation failed");
+    game->window.frame.img.img = mlx_new_image(game->window.mlx_ptr, 
+                                              game->window.width, 
+                                              game->window.height);
+    if (!game->window.frame.img.img)
+        exit_error(game, "Image creation failed");
+    
+    game->window.frame.img.addr = mlx_get_data_addr(game->window.frame.img.img, 
+                                                  &game->window.frame.img.bits_per_pixel, 
+                                                  &game->window.frame.img.size_line, 
+                                                  &game->window.frame.img.endian);
+	// verify_texture_files(game);
+    load_textures(game);
+    init_player(game);
 }
 
 void	setup_hooks(t_game *game)
@@ -60,18 +61,19 @@ void	exit_error(t_game *game, char *message)
 	exit(1);
 }
 
-void	cleanup_game(t_game *game)
+void    cleanup_game(t_game *game)
 {
-	if (game->window.frame.img.img)
-		mlx_destroy_image(game->window.mlx_ptr, game->window.frame.img.img);
-	if (game->window.win_ptr)
-		mlx_destroy_window(game->window.mlx_ptr, game->window.win_ptr);
-	if (game->window.mlx_ptr)
-	{
-		mlx_destroy_display(game->window.mlx_ptr);
-		free(game->window.mlx_ptr);
-	}
-	ft_free_data(&game->map);
+    cleanup_textures(game);
+    if (game->window.frame.img.img)
+        mlx_destroy_image(game->window.mlx_ptr, game->window.frame.img.img);
+    if (game->window.win_ptr)
+        mlx_destroy_window(game->window.mlx_ptr, game->window.win_ptr);
+    if (game->window.mlx_ptr)
+    {
+        mlx_destroy_display(game->window.mlx_ptr);
+        free(game->window.mlx_ptr);
+    }
+    ft_free_data(&game->map);
 }
 
 void	get_player_spawn(t_game *game)

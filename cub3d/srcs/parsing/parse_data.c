@@ -12,7 +12,25 @@
 
 #include "../cub3d.h"
 
-// TODO - Verifier si on peut acceder au fichier de la texture
+// TODO - AJOUT
+char *trim_path(char *path)
+{
+    char *start;
+    char *end;
+    int len;
+
+	start = path;
+    while (*start && (*start == ' ' || *start == '\t'))
+        start++;
+    if (!*start)
+        return ft_strdup("");
+    end = start + ft_strlen(start) - 1;
+    while (end > start && (*end == ' ' || *end == '\t' || *end == '\n'))
+        end--;
+    len = end - start + 1;
+    return ft_substr(start, 0, len);
+}
+
 int	parse_textures_lines(t_textures *textures)
 {
 	int		i;
@@ -23,13 +41,13 @@ int	parse_textures_lines(t_textures *textures)
 	{
 		line = textures->textures[i];
 		if (!ft_strncmp(line, "NO ", 3))
-			textures->no_texture = ft_strdup(line + 3);
+			textures->no_texture = trim_path(line + 3);
 		else if (!ft_strncmp(line, "SO ", 3))
-			textures->so_texture = ft_strdup(line + 3);
+			textures->so_texture = trim_path(line + 3);
 		else if (!ft_strncmp(line, "WE ", 3))
-			textures->we_texture = ft_strdup(line + 3);
+			textures->we_texture = trim_path(line + 3);
 		else if (!ft_strncmp(line, "EA ", 3))
-			textures->ea_texture = ft_strdup(line + 3);
+			textures->ea_texture = trim_path(line + 3);
 		else if (!ft_strncmp(line, "F ", 2))
 		{
 			textures->floor_color = ft_strdup(line + 2);

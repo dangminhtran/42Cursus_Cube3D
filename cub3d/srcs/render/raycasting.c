@@ -162,27 +162,49 @@ void	perform_dda(t_game *game)
 void	draw_vertical_line(t_game *game, int x)
 {
 	int y;
-	int color;
+    int tex_x;
+    int tex_y;
+    double wall_x;
+    double step;
+    double tex_pos;
+    int color;
+    t_image *texture;
 
-	// Choix de la couleur du mur en fonction de l'orientation (N, S, E, W)
+	 // Calcul pour savoir où le mur a été touché
+    if (game->frame.side == 0)
+        wall_x = game->player.pos.y + game->frame.perp_wall_dist * game->frame.ray_dir.y;
+    else
+        wall_x = game->player.pos.x + game->frame.perp_wall_dist * game->frame.ray_dir.x;
+    wall_x -= floor(wall_x);
+
+	// Texture du mur en fonction de l'orientation (N, S, E, W)
 	if (game->frame.side == 0)
 	{
 		if (game->frame.ray_dir.x > 0)
-			color = 0x00EA9999; // Coté Est - Rose
+			texture = &game->textures.east_img; // E
 		else
-			color = 0x00B22222; // Côté Ouest - Rouge
+			texture = &game->textures.west_img; // W
 	}
 	else
 	{
 		if (game->frame.ray_dir.y > 0)
-			color = 0x0090EE90; // Côté Sud - vert clair
+			texture = &game->textures.south_img; // S
 		else
-			color = 0x00006400; // Côté nord - vert foncé
+			texture = &game->textures.north_img; // N
 	}
 	
-	// On divise la couleur par 2 pour l'assombrir
-	if (game->frame.side == 1)
-		color = (color >> 1) & 8355711;
+	// Calculer x sur la texture
+    tex_x = (int)(wall_x * game->textures.tex_width);
+    if ((game->frame.side == 0 && game->frame.ray_dir.x > 0) ||
+        (game->frame.side == 1 && game->frame.ray_dir.y < 0))
+        tex_x = game->textures.tex_width - tex_x - 1;
+
+	// Calculer de combien il faut augmenter la coordonnée de la texture (en pixel)
+	step = 1.0 * game->textures.tex_height / game->frame.line_height;
+
+	// Coordonnée de départ pour la texture
+    tex_pos = (game->frame.draw_start - game->window.height / 2 + 
+              game->frame.line_height / 2) * step;
 	
 	// Dessiner le plafond (haut de l'écran)
 	y = 0;
@@ -196,10 +218,17 @@ void	draw_vertical_line(t_game *game, int x)
 	
 	// Dessiner le mur (partie centrale)
 	while (y < game->frame.draw_end)
-	{
-		put_pixel(game, x, y, color);
-		y++;
-	}
+    {
+        tex_y = (int)tex_pos & (game->textures.tex_height - 1);
+        tex_pos += step;
+        color = get_texture_color(texture, tex_x, tex_y);
+        
+        // Tips : pour mettre des couleurs plus foncées sur y
+        if (game->frame.side == 1)
+            color = (color >> 1) & 8355711; // Divisé par 2 pour une couleur plus foncée
+        put_pixel(game, x, y, color);
+        y++;
+    }
 	
 	// Dessiner le sol (bas de l'écran)
 	while (y < game->window.height)
