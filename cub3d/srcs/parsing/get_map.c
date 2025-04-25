@@ -62,11 +62,11 @@ void	get_special_map(t_map_data *map_data)
 {
 	int	i;
 	int	j;
-	int	count;
+	// int	count;
 
 	i = 0;
 	j = 0;
-	count = 0;
+	// count = 0;
 	map_data->special_map = malloc(sizeof(char *) * (map_data->map_height + 2));
 	while (i < map_data->map_height + 2)
 	{

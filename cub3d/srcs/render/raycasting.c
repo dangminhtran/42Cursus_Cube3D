@@ -195,9 +195,8 @@ void	draw_vertical_line(t_game *game, int x)
 	
 	// Calculer x sur la texture
     tex_x = (int)(wall_x * game->textures.tex_width);
-    if ((game->frame.side == 0 && game->frame.ray_dir.x > 0) ||
-        (game->frame.side == 1 && game->frame.ray_dir.y < 0))
-        tex_x = game->textures.tex_width - tex_x - 1;
+    if ((game->frame.side == 0 && game->frame.ray_dir.x > 0) || (game->frame.side == 1 && game->frame.ray_dir.y < 0))
+		tex_x = game->textures.tex_width - tex_x - 1;
 
 	// Calculer de combien il faut augmenter la coordonnée de la texture (en pixel)
 	step = 1.0 * game->textures.tex_height / game->frame.line_height;
