@@ -68,7 +68,6 @@ void    load_textures(t_game *game)
         &game->textures.west_img.endian);
 }
 
-
 int    get_texture_color(t_image *img, int x, int y)
 {
     char    *dst;
@@ -80,7 +79,6 @@ int    get_texture_color(t_image *img, int x, int y)
     return (*(unsigned int*)dst);
 }
 
-
 void    cleanup_textures(t_game *game)
 {
     if (game->textures.north_img.img)
@@ -91,6 +89,20 @@ void    cleanup_textures(t_game *game)
         mlx_destroy_image(game->window.mlx_ptr, game->textures.east_img.img);
     if (game->textures.west_img.img)
         mlx_destroy_image(game->window.mlx_ptr, game->textures.west_img.img);
+
+    if (game->textures.no_texture)
+        free(game->textures.no_texture);
+    if (game->textures.so_texture)
+        free(game->textures.so_texture);
+    if (game->textures.ea_texture)
+        free(game->textures.ea_texture);
+    if (game->textures.we_texture)
+        free(game->textures.we_texture);
+    
+    if (game->textures.floor_color)
+        free(game->textures.floor_color);
+    if (game->textures.ceiling_color)
+        free(game->textures.ceiling_color);
 }
 
 // DEBUG

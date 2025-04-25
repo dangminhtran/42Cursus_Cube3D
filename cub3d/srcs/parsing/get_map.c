@@ -91,5 +91,5 @@ void	get_special_map(t_map_data *map_data)
 		// printf("%s\n", map_data->special_map[i]);
 		i++;
 	}
-	map_data->special_map[i] = NULL;
+//	map_data->special_map[i] = NULL;
 }

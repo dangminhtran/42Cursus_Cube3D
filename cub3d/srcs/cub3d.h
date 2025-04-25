@@ -225,6 +225,7 @@ int				is_valid_extension(char *str);
 int				is_empty_line(char *line);
 void			ft_free(char **map, int count);
 void			ft_free_data(t_map_data *map_data);
+void free_special_map(t_map_data *map_data);
 int				ft_strlen2(char *str);
 void			init_data(t_map_data *map_data);
 void			init_textures(t_textures *textures);
