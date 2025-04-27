@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamartin <yamartin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dangtran <dangtran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:05:34 by yamartin          #+#    #+#             */
-/*   Updated: 2025/04/25 16:50:08 by yamartin         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:24:26 by dangtran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,40 +152,48 @@ typedef struct s_game
 }				t_game;
 
 /* cub3d.c */
-void			init_game(t_game *game);
 void			setup_hooks(t_game *game);
+void			get_player_spawn(t_game *game);
+
+/* init.c */
+void			init_game(t_game *game);
+void			init_player(t_game *game);
+
+/* exit.c */
 int				close_window(t_game *game);
 void			exit_error(t_game *game, char *message);
 void			cleanup_game(t_game *game);
-void			get_player_spawn(t_game *game);
+void			clear_image(t_game *game);
+
+/* controls_player.c*/
+int				handle_keypress(int keycode, t_game *game);
+int				handle_keyrelease(int keycode, t_game *game);
+void			update_game_state(t_game *game);
 
 /* move_player.c */
-int				handle_keypress(int keycode, t_game *game);
 void			move_forward(t_game *game);
 void			move_backward(t_game *game);
 void			move_left(t_game *game);
 void			move_right(t_game *game);
+int				is_valid_position(t_game *game, double x, double y);
+
+/* move_camera.c */
 void			rotate_left(t_game *game);
 void			rotate_right(t_game *game);
-int				is_valid_position(t_game *game, double x, double y);
-int				handle_keyrelease(int keycode, t_game *game);
-void			update_game_state(t_game *game);
 
 /* raycasting.c */
-void			init_player(t_game *game);
 void			cast_rays(t_game *game);
 void			perform_dda(t_game *game);
 void			draw_vertical_line(t_game *game, int x);
 void			put_pixel(t_game *game, int x, int y, int color);
 int				render_frame(t_game *game);
-void			clear_image(t_game *game);
 
 /* texture.c */
 void			setup_texture_paths(t_textures *textures);
 void			load_textures(t_game *game);
 int				get_texture_color(t_image *img, int x, int y);
 void			cleanup_textures(t_game *game);
-void			print_texture_paths(t_textures *textures);
+// void			print_texture_paths(t_textures *textures);
 
 /* stock_file.c */
 int				ft_get_map_size(char *path);
@@ -224,15 +232,9 @@ int				is_valid_extension(char *str);
 int				is_empty_line(char *line);
 void			ft_free(char **map, int count);
 void			ft_free_data(t_map_data *map_data);
-void free_special_map(t_map_data *map_data);
+void			free_special_map(t_map_data *map_data);
 int				ft_strlen2(char *str);
 void			init_data(t_map_data *map_data);
 void			init_textures(t_textures *textures);
-
-// PAS UTILISES - TODO - A MERGE
-void			open_window(t_window *window);
-int				quit(t_window *window);
-int				keypress(int keycode, t_window *window);
-void			free_mlx(t_window *window);
 
 #endif

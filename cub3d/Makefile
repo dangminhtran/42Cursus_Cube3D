@@ -12,7 +12,8 @@ INCLUDES = -I./includes -I$(MLX_DIR) -I$(LIBFT_DIR)
 SRCES = srcs/main/cub3d.c srcs/parsing/stock_file.c srcs/get_next_line/get_next_line_utils.c \
 srcs/get_next_line/get_next_line.c srcs/parsing/get_data.c srcs/parsing/get_map.c srcs/parsing/parsing.c \
 srcs/parsing/utils_parsing.c srcs/parsing/parse_map.c srcs/parsing/parse_data.c srcs/player/move_player.c \
-srcs/render/raycasting.c srcs/render/texture.c
+srcs/player/controls_player.c srcs/player/move_camera.c srcs/render/raycasting.c srcs/render/texture.c \
+srcs/inits/init.c srcs/inits/exit.c
 
 OBJECTS = $(SRCES:.c=.o)
 
